@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 Традиції | Українська кухня</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<table class="site-table">
+    <tr class="header-row">
+        <td class="header-content">
+            <table width="100%">
+                <tr>
+                    <td align="left"><span class="logo" onclick="location.href='index.html'">🍴 Українська кухня <small>рецепти та традиції</small></span></td>
+                    <td align="right"><span class="date-time" id="currentDateTime"></span></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr class="tabs-row">
+        <td class="tabs-cell">
+            <table class="tabs-table">
+                <tr>
+                    <td align="center">
+                        <a href="index.html" class="tab-btn">🏠 Головна</a>
+                        <a href="recipes.html" class="tab-btn">📖 Рецепти</a>
+                        <a href="traditions.html" class="tab-btn active">🎭 Традиції</a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="main-content">
+            <div class="category-header">
+                <h1>🎭 Традиції</h1>
+                <p>Історія, звичаї та культура української кухні</p>
+            </div>
+
+            <table class="traditions-list" id="traditionsList">
+                <!-- заповнюється JS -->
+            </table>
+
+            <table class="subscribe">
+                <tr>
+                    <td align="center">
+                        <h3>📧 Смачних новин</h3>
+                        <p>Підпишись — отримуй нові рецепти щотижня</p>
+                        <div class="subscribe-form">
+                            <input type="email" id="subEmail" placeholder="твій email">
+                            <button onclick="subscribeNews()">Підписатись</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr class="footer">
+        <td>
+            <p>🍴 Українська кухня — традиції, які смакують</p>
+            <p>рецепти, історія, культура харчування | 2026</p>
+        </td>
+    </tr>
+</table>
+
+<div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
+
+<div id="newsModal" class="modal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-content">
+        <div class="modal-header"><h2 id="modalTitle"></h2><span class="close-modal" onclick="closeModal()">&times;</span></div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    const traditions = [
+        {
+            id: 1,
+            title: "🍞 Хліб — усьому голова",
+            excerpt: "Чому українці ставилися до хліба як до святині.",
+            content: "Українці здавна вважали хліб символом достатку та благополуччя. Хліб не можна було викидати — його годували птахам або тваринам. Гостей зустрічали хлібом-сіллю, а без хліба не сідали за стіл. Існувало повір'я: якщо хліб впав на підлогу — його треба поцілувати. Випікання хліба супроводжувалося молитвами та спеціальними обрядами.",
+            emoji: "🍞",
+            date: "2026-05-20",
+            views: 12500,
+            category: "Традиція"
+        },
+        {
+            id: 2,
+            title: "🥣 Вечеря в родинному колі",
+            excerpt: "Традиція спільних трапез, яка об'єднує покоління.",
+            content: "Українська родина завжди збиралася за великим столом. Вечеря була не просто прийомом їжі, а часом спілкування, обміну новинами, передачі досвіду від старших до молодших. Сімейні рецепти передавалися з покоління в покоління. Спільна трапеза зміцнювала родинні зв'язки та створювала відчуття єдності.",
+            emoji: "🥣",
+            date: "2026-05-19",
+            views: 8900,
+            category: "Традиція"
+        },
+        {
+            id: 3,
+            title: "🌾 Обжинки — свято врожаю",
+            excerpt: "Давній звичай святкування закінчення жнив.",
+            content: "Обжинки — традиційне свято завершення збору врожаю. Після важкої роботи в полі люди влаштовували бенкет, пекли караваї з нового зерна, співали жниварських пісень. Це був день подяки землі за дари та відпочинку після виснажливої праці. Найкращі страви готували з нового врожаю, щоб задобрити землю на наступний рік.",
+            emoji: "🌾",
+            date: "2026-05-18",
+            views: 6700,
+            category: "Традиція"
+        },
+        {
+            id: 4,
+            title: "🍯 Медовуха та узвар",
+            excerpt: "Традиційні напої української кухні.",
+            content: "Медовуха — давній слов'янський напій з меду, води та дріжджів. Її варили до весіль та великих свят. Узвар — компот із сухофруктів, який обов'язково готували на Різдво. Вважалося, що ці напої мають цілющі властивості та додають сили. Рецепти приготування передавалися з покоління в покоління.",
+            emoji: "🍯",
+            date: "2026-05-17",
+            views: 5400,
+            category: "Традиція"
+        },
+        {
+            id: 5,
+            title: "🥟 Різдвяна кутя",
+            excerpt: "Символічна страва, яка об'єднує живих та померлих.",
+            content: "Кутя — головна страва Різдвяної вечері. Її готують з пшениці, меду, маку, горіхів та родзинок. Кожен інгредієнт має символічне значення: пшениця — вічність життя, мед — насолода раю, мак — достаток. Традиційно кутю ставили на стіл першою, а після вечері залишали на столі для душ предків.",
+            emoji: "🥟",
+            date: "2026-05-16",
+            views: 15800,
+            category: "Традиція"
+        },
+        {
+            id: 6,
+            title: "🍲 Великодній кошик",
+            excerpt: "Що символізують страви, освячені на Великдень.",
+            content: "До великоднього кошика кладуть паску — символ воскресіння, яйця (писанки) — символ нового життя, ковбасу та сало — символ достатку, хрін — символ міцності духу, масло — символ Божої ласки. Освячені продукти вважалися святинею, яку зберігали протягом року. Перший шматок паски ділили між усіма членами родини.",
+            emoji: "🍲",
+            date: "2026-05-15",
+            views: 19200,
+            category: "Традиція"
+        }
+    ];
+
+    function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        const day = d.getDate().toString().padStart(2, '0');
+        const month = (d.getMonth() + 1).toString().padStart(2, '0');
+        const year = d.getFullYear();
+        return day + '.' + month + '.' + year;
+    }
+
+    function openModal(item) {
+        document.getElementById('modalTitle').innerHTML = item.title;
+        document.getElementById('modalBody').innerHTML = 
+            '<div class="modal-emoji">' + item.emoji + '</div>' +
+            '<div class="modal-meta">' +
+                '<span>📅 ' + formatDate(item.date) + '</span>' +
+                '<span>👁️ ' + item.views.toLocaleString() + '</span>' +
+                '<span>📌 ' + item.category + '</span>' +
+            '</div>' +
+            '<p style="line-height:1.6; color:#5c2e0e;">' + item.content + '</p>';
+        document.getElementById('newsModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('newsModal').style.display = 'none';
+    }
+
+    function subscribeNews() {
+        const email = document.getElementById('subEmail').value;
+        if (email) {
+            alert('🍴 Дякуємо! На ' + email + ' надіслано підтвердження.');
+        } else {
+            alert('Введи email');
+        }
+    }
+
+    function renderTraditions() {
+        let html = '';
+        for (let i = 0; i < traditions.length; i++) {
+            const t = traditions[i];
+            html += '<tr class="tradition-item" onclick="openModal(traditions[' + i + '])">';
+            html += '<td class="tradition-emoji" align="center">' + t.emoji + '</td>';
+            html += '<td>';
+            html += '<div class="tradition-title">' + t.title + '</div>';
+            html += '<div class="tradition-excerpt">' + t.excerpt + '</div>';
+            html += '<div class="recipe-meta" style="margin-top:8px;">';
+            html += '<span>📅 ' + formatDate(t.date) + '</span>';
+            html += '<span>👁️ ' + t.views.toLocaleString() + '</span>';
+            html += '</div></td></tr>';
+        }
+        document.getElementById('traditionsList').innerHTML = html;
+    }
+
+    function updateDateTime() {
+        const d = new Date();
+        const options = { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' };
+        document.getElementById('currentDateTime').innerHTML = d.toLocaleString('uk-UA', options);
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+    renderTraditions();
+
+    window.addEventListener('scroll', function() {
+        const el = document.getElementById('scrollTop');
+        if (window.scrollY > 300) {
+            el.classList.add('show');
+        } else {
+            el.classList.remove('show');
+        }
+    });
+
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.subscribeNews = subscribeNews;
+    window.traditions = traditions;
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍴 Українська кухня — рецепти та традиції</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<table class="site-table">
+    <tr class="header-row">
+        <td class="header-content">
+            <table width="100%">
+                <tr>
+                    <td align="left"><span class="logo" onclick="location.href='index.html'">🍴 Українська кухня <small>рецепти та традиції</small></span></td>
+                    <td align="right"><span class="date-time" id="currentDateTime"></span></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr class="tabs-row">
+        <td class="tabs-cell">
+            <table class="tabs-table">
+                <tr>
+                    <td align="center">
+                        <a href="index.html" class="tab-btn active">🏠 Головна</a>
+                        <a href="recipes.html" class="tab-btn">📖 Рецепти</a>
+                        <a href="traditions.html" class="tab-btn">🎭 Традиції</a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="main-content">
+            <!-- Головна стаття -->
+            <table class="featured-table" id="featuredNews">
+                <!-- заповнюється JS -->
+            </table>
+
+            <div class="category-header">
+                <h1>🍲 Улюблені рецепти</h1>
+                <p>Смачні страви, які готують українці</p>
+            </div>
+
+            <table class="recipes-grid" id="popularRecipes">
+                <!-- заповнюється JS -->
+            </table>
+
+            <table class="subscribe">
+                <tr>
+                    <td align="center">
+                        <h3>📧 Смачних новин</h3>
+                        <p>Підпишись — отримуй нові рецепти щотижня</p>
+                        <div class="subscribe-form">
+                            <input type="email" id="subEmail" placeholder="твій email">
+                            <button onclick="subscribeNews()">Підписатись</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr class="footer">
+        <td>
+            <p>🍴 Українська кухня — традиції, які смакують</p>
+            <p>рецепти, історія, культура харчування | 2026</p>
+        </td>
+    </tr>
+</table>
+
+<div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
+
+<div id="newsModal" class="modal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-content">
+        <div class="modal-header"><h2 id="modalTitle"></h2><span class="close-modal" onclick="closeModal()">&times;</span></div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    const recipes = [
+        { id: 1, title: "🥟 Борщ український", excerpt: "Наваристий червоний борщ з пампушками — класика української кухні.", content: "Інгредієнти: буряк, капуста, картопля, морква, цибуля, томатна паста, часник, сало, м'ясо. Варити м'ясний бульйон 2 години. Додати нарізані овочі. Окремо засмажити буряк з томатом. Заправити борщ засмажкою, додати часник та зелень. Подавати зі сметаною та пампушками.", emoji: "🥟", date: "2026-05-20", views: 15420, category: "Рецепт" },
+        { id: 2, title: "🥟 Вареники з вишнею", excerpt: "Соковиті вареники з кисло-солодкою вишнею — десерт, який полюбляють усі.", content: "Тісто: борошно, яйце, вода, сіль, олія. Начинка: вишня без кісточок, цукор. Замісити тісто, розкачати, вирізати кружечки. На кожен покласти вишню та цукор, защипати. Варити у киплячій воді 5 хвилин. Подавати зі сметаною.", emoji: "🥟", date: "2026-05-19", views: 12350, category: "Рецепт" },
+        { id: 3, title: "🍲 Салат «Олів'є» український", excerpt: "Святковий салат, без якого не обходиться жодне застілля.", content: "Варені картопля, морква, яйця, ковбаса або куряче філе, солоні огірки, консервований горошок. Все нарізати кубиками, заправити майонезом. Подавати охолодженим.", emoji: "🍲", date: "2026-05-18", views: 9870, category: "Рецепт" }
+    ];
+
+    const featured = recipes[0];
+
+    function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        return d.getDate().toString().padStart(2,'0') + '.' + (d.getMonth()+1).toString().padStart(2,'0') + '.' + d.getFullYear();
+    }
+
+    function openModal(item) {
+        document.getElementById('modalTitle').innerHTML = item.title;
+        document.getElementById('modalBody').innerHTML = '<div class="modal-emoji">' + item.emoji + '</div><div class="modal-meta"><span>📅 ' + formatDate(item.date) + '</span><span>👁️ ' + item.views.toLocaleString() + '</span><span>📌 ' + item.category + '</span></div><p style="line-height:1.6; color:#5c2e0e;">' + item.content + '</p>';
+        document.getElementById('newsModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('newsModal').style.display = 'none';
+    }
+
+    function subscribeNews() {
+        const email = document.getElementById('subEmail').value;
+        if(email) alert('🍴 Дякуємо! На ' + email + ' надіслано підтвердження.');
+        else alert('Введи email');
+    }
+
+    function renderFeatured() {
+        document.getElementById('featuredNews').innerHTML = '<tr><td class="featured-emoji-cell">' + featured.emoji + '</td><td class="featured-content-cell"><div class="featured-badge">⭐ Найпопулярніше</div><div class="featured-title">' + featured.title + '</div><div class="featured-excerpt">' + featured.excerpt + '</div><div><span style="color:#b97c3c;">📅 ' + formatDate(featured.date) + ' · 👁️ ' + featured.views.toLocaleString() + '</span></div></td></tr>';
+        document.querySelector('.featured-table').onclick = () => openModal(featured);
+    }
+
+    function renderPopular() {
+        let html = '<tr>';
+        for(let i = 0; i < recipes.length; i++) {
+            const r = recipes[i];
+            html += '<td width="33%"><div class="recipe-card" onclick="openModal(recipes[' + i + '])"><div class="recipe-emoji">' + r.emoji + '</div><div class="recipe-content"><div class="recipe-title">' + r.title + '</div><div class="recipe-excerpt">' + r.excerpt + '</div><div class="recipe-meta"><span>📅 ' + formatDate(r.date) + '</span><span>👁️ ' + r.views.toLocaleString() + '</span></div></div></div></td>';
+            if((i+1) % 3 === 0 && i+1 < recipes.length) html += '</tr><tr>';
+        }
+        html += '</tr>';
+        document.getElementById('popularRecipes').innerHTML = html;
+    }
+
+    function updateDateTime() {
+        const d = new Date();
+        document.getElementById('currentDateTime').innerHTML = d.toLocaleString('uk-UA', { hour:'2-digit', minute:'2-digit', day:'numeric', month:'short' });
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+    renderFeatured();
+    renderPopular();
+
+    window.addEventListener('scroll', function() {
+        const el = document.getElementById('scrollTop');
+        if(window.scrollY > 300) el.classList.add('show');
+        else el.classList.remove('show');
+    });
+
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.subscribeNews = subscribeNews;
+    window.recipes = recipes;
+</script>
+</body>
+</html>
